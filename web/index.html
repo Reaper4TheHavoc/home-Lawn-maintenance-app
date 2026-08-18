@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en" class="dashboard-root">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b121b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Home Maintenance" />
+  <title>Home & Lawn Maintenance</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-mode">
+  <header class="app-header">
+    <div class="app-header-row">
+      <button class="compact-brand" type="button" onclick="showDashboardLanding()" aria-label="Open dashboard">
+        <span class="compact-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" focusable="false">
+            <path d="M10 29 32 11l22 18v23a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4Z"></path>
+            <path class="logo-check" d="m22 34 7 7 14-16"></path>
+          </svg>
+        </span>
+        <span class="compact-brand-copy">
+          <strong>Home & Lawn</strong>
+          <small>Maintenance</small>
+        </span>
+      </button>
+      <button class="header-dashboard-button" type="button" onclick="showDashboardLanding()">Dashboard</button>
+    </div>
+
+    <div class="search-wrap">
+      <input id="globalSearch" type="text" placeholder="Search leaks, roof, bills, repairs..." autocomplete="off" />
+      <div id="searchResults" class="search-results"></div>
+    </div>
+  </header>
+
+  <div id="offlineBanner" class="offline-banner" hidden role="status" aria-live="polite">
+    <strong>Offline mode</strong>
+    <span>Your saved home data and core tools still work. Internet-only links will resume when you reconnect.</span>
+  </div>
+
+  <main>
+
+    <section id="dashboardLanding" class="dashboard-landing active" aria-label="Home dashboard">
+      <div class="landing-brand">
+        <div class="landing-logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64" focusable="false">
+            <path d="M10 29 32 11l22 18v23a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4Z"></path>
+            <path class="logo-check" d="m22 34 7 7 14-16"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="landing-eyebrow">YOUR HOME, ORGANIZED</div>
+          <h1>Home & Lawn Maintenance</h1>
+          <p>Simple upkeep. Fewer surprises.</p>
+        </div>
+      </div>
+
+      <div class="hero home-dashboard dashboard-primary" data-search-title="Home dashboard overview">
+        <div class="dashboard-heading">
+          <div>
+            <div class="dashboard-kicker">TODAY AT A GLANCE</div>
+            <h2>Your Home Dashboard</h2>
+            <p>What needs your attention, all in one place.</p>
+          </div>
+          <span class="chip" id="dashboardHealthChip">Getting started</span>
+        </div>
+
+        <div class="dashboard-grid">
+          <button class="dashboard-stat dashboard-stat-featured" type="button" onclick="scrollToDashboardTarget('homeChecklistHero')">
+            <span>Monthly maintenance</span>
+            <strong id="dashboardHomeProgress">0%</strong>
+            <small>Checklist complete</small>
+          </button>
+          <button class="dashboard-stat dashboard-stat-featured" type="button" onclick="openHomeManagementSection('maintenanceScheduleCard')">
+            <span>Due / overdue</span>
+            <strong id="dashboardDueCount">0 / 0</strong>
+            <small>Maintenance schedule</small>
+          </button>
+          <button class="dashboard-stat" type="button" onclick="openHomeManagementSection('inventoryCard')">
+            <span>Inventory</span>
+            <strong id="dashboardInventoryCount">0</strong>
+          </button>
+          <button class="dashboard-stat" type="button" onclick="openHomeManagementSection('projectsCard')">
+            <span>Active projects</span>
+            <strong id="dashboardProjectCount">0</strong>
+          </button>
+          <button class="dashboard-stat" type="button" onclick="navigateToTab('notesTab')">
+            <span>This month</span>
+            <strong id="dashboardMonthSpend">$0</strong>
+          </button>
+          <button class="dashboard-stat" type="button" onclick="navigateToTab('notesTab')">
+            <span>This year</span>
+            <strong id="dashboardYearSpend">$0</strong>
+          </button>
+        </div>
+
+        <div class="dashboard-alerts" id="dashboardAlerts"></div>
+      </div>
+
+    </section>
+
+    
+    <section id="maintenance" class="tab">
+
+      <div class="hero" id="homeChecklistHero">
+        <h2>Monthly Home Checklist</h2>
+        <p>Tap any item to expand the quick troubleshooting guide.</p>
+        <div class="progress"><div id="homeProgressBar"></div></div>
+        <div class="progress-label" id="homeProgressText">0% complete</div>
+      </div>
+
+      <h3 class="section-title">Safety</h3>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-smoke" />
+          <span class="title">Test smoke alarms</span>
+        </summary>
+        <div class="detail-body">
+          <h4>What to do</h4>
+          <ul>
+            <li>Press and hold the test button.</li>
+            <li>Confirm the alarm sounds strongly.</li>
+            <li>Check each bedroom, hallway, and main living area.</li>
+          </ul>
+          <div class="pro">If it does not test correctly after a fresh battery, replace the alarm or have it inspected.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-co" />
+          <span class="title">Test carbon monoxide alarms</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Press the test button.</li>
+            <li>Check the unit's expiration or replacement date.</li>
+            <li>Make sure it is not blocked.</li>
+          </ul>
+          <div class="warning">If a CO alarm sounds unexpectedly, leave the area and treat it as a real warning until the cause is identified.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-gfci" />
+          <span class="title">Test GFCI outlets</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Press TEST.</li>
+            <li>The outlet should shut off.</li>
+            <li>Press RESET to restore power.</li>
+          </ul>
+          <div class="pro">If it will not trip or reset, stop using it and have the circuit inspected.</div>
+        </div>
+      </details>
+
+      <h3 class="section-title">Heating & Cooling</h3>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-filter" />
+          <span class="title">Inspect HVAC filter</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Turn the system off.</li>
+            <li>Remove the old filter.</li>
+            <li>Confirm the replacement size.</li>
+            <li>Install it with the airflow arrow pointing toward the blower.</li>
+          </ul>
+          <div class="tip">A clean filter helps airflow and can reduce strain on the system.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-ac" />
+          <span class="title">Inspect outdoor AC unit</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Clear leaves, grass, and debris around the condenser.</li>
+            <li>Check for abnormal vibration or visible damage.</li>
+          </ul>
+          <div class="warning">Disconnect electrical power before opening panels or working near fan blades.</div>
+        </div>
+      </details>
+
+      <h3 class="section-title">Water & Plumbing</h3>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-sink" />
+          <span class="title">Check under sinks for leaks</span>
+        </summary>
+        <div class="detail-body">
+          <h4>If you find water</h4>
+          <ul>
+            <li>Dry the area completely.</li>
+            <li>Run the faucet and watch the supply lines and drain.</li>
+            <li>Check fittings for dripping.</li>
+            <li>Use the local shutoff valves if needed.</li>
+          </ul>
+          <div class="pro">Call a plumber if the leak is inside a wall, a shutoff valve will not close, or you cannot identify the source.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-toilet" />
+          <span class="title">Check toilets for leaks or running</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Check the flapper and chain inside the tank.</li>
+            <li>Check the fill valve and water level.</li>
+            <li>If water appears at the base during flushing, stop using the toilet until the seal is checked.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-heater" />
+          <span class="title">Inspect water heater</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Look for water underneath the tank.</li>
+            <li>Inspect visible piping for corrosion.</li>
+            <li>Listen for unusual popping or banging.</li>
+          </ul>
+          <div class="pro">A tank leaking from the body itself usually needs professional evaluation and often replacement.</div>
+        </div>
+      </details>
+
+      <h3 class="section-title">Exterior & Appliances</h3>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-foundation" />
+          <span class="title">Inspect foundation for cracks or damage</span>
+        </summary>
+        <div class="detail-body">
+          <h4>What to look for</h4>
+          <ul>
+            <li>New cracks in poured concrete, block, or brick foundation walls.</li>
+            <li>Cracks that appear wider than before or continue to grow.</li>
+            <li>Horizontal cracks, stair-step cracks in masonry, or sections that look bowed or displaced.</li>
+            <li>Water staining, dampness, efflorescence, or active seepage near the crack.</li>
+            <li>Doors or windows that suddenly stick, floors that feel newly uneven, or gaps opening around trim.</li>
+          </ul>
+
+          <h4>What you can do</h4>
+          <ul>
+            <li>Take a clear photo and date it so you can compare the crack over time.</li>
+            <li>Mark the ends lightly with a pencil to see whether the crack extends.</li>
+            <li>Check nearby grading, gutters, and downspouts to make sure water is directed away from the home.</li>
+          </ul>
+
+          <div class="warning">
+            Do not simply cover a large or changing crack with patch material before determining why it formed.
+          </div>
+
+          <div class="pro">
+            Have a qualified foundation professional or structural engineer evaluate cracks that are large, widening, horizontal, stair-step shaped, accompanied by wall movement, or associated with significant water intrusion or sudden changes inside the home.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-shingles" />
+          <span class="title">Inspect roof shingles</span>
+        </summary>
+        <div class="detail-body">
+          <h4>What to look for</h4>
+          <ul>
+            <li>Missing, lifted, curled, cracked, or visibly damaged shingles.</li>
+            <li>Bare spots where protective granules appear to be worn away.</li>
+            <li>Loose flashing around chimneys, vents, skylights, or roof edges.</li>
+            <li>Shingle pieces or excessive granules collecting in gutters or on the ground.</li>
+            <li>New water stains on ceilings or in the attic after rain.</li>
+          </ul>
+
+          <h4>Safe inspection</h4>
+          <ul>
+            <li>Do the initial inspection from the ground using binoculars or your phone camera zoom.</li>
+            <li>Check again after strong wind, hail, or severe storms.</li>
+            <li>Document suspicious areas with photos so you can compare changes over time.</li>
+          </ul>
+
+          <div class="warning">
+            Avoid walking on the roof unless you are trained and equipped to do so. Wet, steep, damaged, or high roofs can be especially dangerous.
+          </div>
+
+          <div class="pro">
+            Contact a qualified roofer if you see missing shingles, widespread curling or cracking, damaged flashing, sagging areas, active leaks, or significant storm damage.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-tree-limbs" />
+          <span class="title">Inspect trees and overhanging limbs</span>
+        </summary>
+        <div class="detail-body">
+          <h4>What to look for</h4>
+          <ul>
+            <li>Dead, cracked, hanging, or partially broken limbs.</li>
+            <li>Branches rubbing against the roof, siding, gutters, windows, or chimney.</li>
+            <li>Limbs hanging over the house, driveway, vehicles, play areas, or walkways.</li>
+            <li>Branches extending over a neighboring property.</li>
+            <li>Large limbs with visible splits, cavities, decay, fungus, or weak attachment points.</li>
+            <li>Trees or limbs leaning toward structures more than they previously did.</li>
+          </ul>
+
+          <h4>What you can do</h4>
+          <ul>
+            <li>Photograph questionable limbs and check them again after storms or high winds.</li>
+            <li>Keep small branches from continuously rubbing against shingles, siding, or gutters.</li>
+            <li>Before trimming branches that extend over a neighbor's property, coordinate with the neighbor and follow applicable local rules.</li>
+          </ul>
+
+          <div class="warning">
+            Do not cut large, suspended, storm-damaged, or heavily loaded limbs yourself. Never trim branches near electrical service lines or utility wires.
+          </div>
+
+          <div class="pro">
+            Contact a qualified arborist for large limbs, high branches, storm damage, significant decay, unstable trees, or branches that could strike a structure. Contact the utility provider for vegetation near power lines.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-gutter" />
+          <span class="title">Inspect gutters and downspouts</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Look for leaves and debris.</li>
+            <li>Make sure downspouts are connected.</li>
+            <li>Confirm water exits away from the foundation.</li>
+          </ul>
+          <div class="warning">Use appropriate ladder safety and avoid roof work in unsafe conditions.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check home-task" type="checkbox" data-key="home-dryer" />
+          <span class="title">Inspect dryer vent</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Clean the lint screen.</li>
+            <li>Check that the exterior vent opens while running.</li>
+            <li>Look for lint buildup behind the dryer.</li>
+          </ul>
+          <div class="warning">Restricted dryer vents can increase drying time and create a fire hazard.</div>
+        </div>
+      </details>
+
+      <div class="card">
+        <strong>Monthly reset</strong>
+        <p class="small">Clears the home checklist but leaves lawn tasks, reminders, groceries, and notes alone.</p>
+        <button class="danger-btn" onclick="resetGroup('home-task')">Start new home-maintenance month</button>
+      </div>
+
+    </section>
+
+    <section id="lawn" class="tab">
+      <div class="hero">
+        <h2>Weekly Lawn Checklist</h2>
+        <p>Your secondary task list for basic lawn upkeep.</p>
+        <div class="progress"><div id="lawnProgressBar"></div></div>
+        <div class="progress-label" id="lawnProgressText">0% complete</div>
+      </div>
+
+      <details open>
+        <summary>
+          <input class="task-check lawn-task" type="checkbox" data-key="lawn-mow" />
+          <span class="title">Mow the lawn</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Mow when the grass is dry.</li>
+            <li>Avoid removing more than about one-third of the grass blade at one time.</li>
+            <li>Alternate mowing direction periodically.</li>
+            <li>Watch for scalping, uneven cutting, or clumping.</li>
+          </ul>
+          <div class="tip">The ideal mowing height depends on your grass species and season.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check lawn-task" type="checkbox" data-key="lawn-edge" />
+          <span class="title">Edge sidewalks and driveway</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Trim growth along hard surfaces.</li>
+            <li>Keep the edge shallow enough to avoid damaging irrigation lines or cable.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check lawn-task" type="checkbox" data-key="lawn-weeds" />
+          <span class="title">Inspect for weeds</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Walk the yard and identify new patches early.</li>
+            <li>Hand-pull isolated weeds when practical.</li>
+            <li>Avoid blanket chemical treatment unless you know the weed and product requirements.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check lawn-task" type="checkbox" data-key="lawn-water" />
+          <span class="title">Check soil moisture and watering</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Look for wilt, footprints that remain visible, or dry soil.</li>
+            <li>Water deeply rather than using frequent shallow watering.</li>
+            <li>Adjust for rainfall and local restrictions.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check lawn-task" type="checkbox" data-key="lawn-debris" />
+          <span class="title">Pick up sticks and debris</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Clear sticks, toys, rocks, and other objects before mowing.</li>
+            <li>Inspect for storm damage or low branches.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <input class="task-check lawn-task" type="checkbox" data-key="lawn-mower" />
+          <span class="title">Quick mower inspection</span>
+        </summary>
+        <div class="detail-body">
+          <ul>
+            <li>Check for loose hardware or obvious damage.</li>
+            <li>Check fuel, battery, or charge level as applicable.</li>
+            <li>Keep the deck clear of heavy buildup.</li>
+          </ul>
+          <div class="warning">Disconnect the spark plug or power source before reaching under a mower deck.</div>
+        </div>
+      </details>
+
+      <div class="card">
+        <strong>Start a new week</strong>
+        <p class="small">Clears only the lawn checkmarks.</p>
+        <button class="secondary" onclick="resetGroup('lawn-task')">Reset lawn checklist</button>
+      </div>
+    </section>
+
+    <section id="reminders" class="tab">
+      <div class="hero">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="flex:1;">
+            <h2 style="margin-bottom:4px;">Reminders</h2>
+            <p>Bills, maintenance, lawn care, appointments, shopping, and anything else you need to remember.</p>
+          </div>
+          <button
+            class="primary"
+            onclick="toggleReminderForm()"
+            aria-label="Add reminder"
+            title="Add reminder"
+            style="width:50px;height:50px;padding:0;border-radius:50%;font-size:2rem;line-height:1;"
+          >+</button>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="small">Active</div>
+            <strong id="activeReminderCount">0</strong>
+          </div>
+          <div class="stat-box">
+            <div class="small">Due today</div>
+            <strong id="dueTodayReminderCount">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Browser notifications</strong>
+        <p class="small">This preview can alert you while it is open. The hosted installable version can be upgraded later for true background push notifications when the app is closed.</p>
+        <button class="primary" onclick="requestNotifications()">Enable notifications</button>
+        <div class="status" id="notificationStatus"></div>
+      </div>
+
+      <div class="card" id="reminderFormCard" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <strong style="flex:1;">Add Reminder</strong>
+          <button class="secondary" onclick="toggleReminderForm(false)" style="min-height:auto;padding:7px 10px;">Close</button>
+        </div>
+
+        <label for="reminderName">Reminder</label>
+        <input id="reminderName" type="text" placeholder="Example: Pay electric bill" />
+
+        <label for="reminderCategory">Category</label>
+        <select id="reminderCategory">
+          <option value="Bills">Bills</option>
+          <option value="Home">Home</option>
+          <option value="Lawn">Lawn</option>
+          <option value="Appointment">Appointment</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="reminderFrequency">Repeats</label>
+        <select id="reminderFrequency" onchange="updateReminderFormFields()">
+          <option value="daily">Daily</option>
+          <option value="weekly" selected>Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+          <option value="once">One time</option>
+        </select>
+
+        <div id="weeklyReminderFields">
+          <label for="reminderDay">Day</label>
+          <select id="reminderDay">
+            <option value="0">Sunday</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6" selected>Saturday</option>
+          </select>
+        </div>
+
+        <div id="monthlyReminderFields" style="display:none;">
+          <label for="reminderMonthDay">Day of month</label>
+          <select id="reminderMonthDay">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+          </select>
+        </div>
+
+        <div id="yearlyReminderFields" style="display:none;">
+          <label for="reminderYearMonth">Month</label>
+          <select id="reminderYearMonth">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+
+          <label for="reminderYearDay">Day</label>
+          <select id="reminderYearDay">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+          </select>
+        </div>
+
+        <div id="onceReminderFields" style="display:none;">
+          <label for="reminderDate">Date</label>
+          <input id="reminderDate" type="date" />
+        </div>
+
+        <label for="reminderTime">Time</label>
+        <input id="reminderTime" type="time" value="09:00" />
+
+        <label for="reminderAmount">Amount (optional)</label>
+        <input id="reminderAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Example: 125.00" />
+
+        <label for="reminderNote">Notes (optional)</label>
+        <input id="reminderNote" type="text" placeholder="Account, confirmation number, what to bring..." />
+
+        <div class="button-row">
+          <button class="primary" onclick="addReminder()">Save reminder</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <strong style="flex:1;">My reminders</strong>
+          <button class="secondary" onclick="renderReminders()" style="min-height:auto;padding:7px 10px;">Refresh</button>
+        </div>
+        <div id="reminderList"></div>
+      </div>
+    </section>
+
+    <section id="groceries" class="tab">
+      <div class="hero">
+        <h2>Grocery List</h2>
+        <p>Add what you need, check items off while shopping, and keep the list saved on this device.</p>
+      </div>
+
+      <div class="card">
+        <strong>Add grocery item</strong>
+        <label for="groceryInput">Item</label>
+        <input id="groceryInput" type="text" placeholder="Example: Milk, chicken, apples..." />
+        <div class="button-row">
+          <button class="primary" onclick="addGroceryItem()">Add item</button>
+          <button class="secondary" onclick="clearCheckedGroceries()">Clear checked</button>
+          <button class="danger-btn" onclick="clearAllGroceries()">Clear all</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>My grocery list</strong>
+        <div id="groceryList"></div>
+      </div>
+
+      <div class="card" data-search-title="Pantry list">
+        <strong>Pantry</strong>
+        <p class="small">Keep track of staples you already have. Recipe ingredients found here will not be added to your grocery list.</p>
+
+        <label for="pantryInput">Pantry item</label>
+        <input id="pantryInput" type="text" placeholder="Example: Rice, eggs, olive oil..." />
+
+        <div class="button-row">
+          <button class="primary" onclick="addPantryItem()">Add pantry item</button>
+          <button class="secondary" onclick="clearCheckedPantry()">Clear checked</button>
+          <button class="danger-btn" onclick="clearAllPantry()">Clear all</button>
+        </div>
+
+        <div id="pantryList" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="hero" style="margin-top:22px;">
+        <h2>Meal Ideas</h2>
+        <p>Rotate through simple recipes for breakfast, lunch, dinner, and quick meals.</p>
+      </div>
+
+      <div class="card" data-search-title="Favorite recipes">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <strong style="flex:1;">Favorite Recipes</strong>
+          <button class="secondary" onclick="renderFavoriteRecipes()">Refresh</button>
+        </div>
+        <p class="small">Tap any saved favorite to open that recipe.</p>
+        <div id="favoriteRecipeList"></div>
+      </div>
+
+      <div class="card">
+        <label for="recipeType">Meal type</label>
+        <select id="recipeType" onchange="showRecipe(true)">
+          <option value="all">Surprise me</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="quick">Quick & Easy</option>
+        </select>
+
+        <label for="recipeFilter">Recipe filter</label>
+        <select id="recipeFilter" onchange="showRecipe(true)">
+          <option value="all">All recipes</option>
+          <option value="favorites">Favorites</option>
+          <option value="cheap">Budget-friendly</option>
+          <option value="fast">20 minutes or less</option>
+          <option value="healthy">Lighter / healthier</option>
+          <option value="family">Family meals</option>
+        </select>
+
+        <div id="recipeCard" class="reminder-item" style="margin-top:14px;"></div>
+
+        <div class="button-row">
+          <button class="primary" onclick="showRecipe(true)">Next recipe</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="notesTab" class="tab">
+      <div class="hero">
+        <h2>Notes</h2>
+        <p>Keep repair notes, parts needed, contractor information, or things to watch.</p>
+      </div>
+
+      <div class="card">
+        <textarea id="notes" placeholder="Example: Kitchen sink drips only when sprayer is used. Need to inspect hose connection..."></textarea>
+        <div class="button-row">
+          <button class="primary" onclick="saveNotes()">Save notes</button>
+          <button class="secondary" onclick="window.print()">Print</button>
+        </div>
+        <div class="status" id="notesStatus"></div>
+      </div>
+
+      <div class="card">
+        <strong>Home Upkeep Spending</strong>
+        <p class="small">Track maintenance, repair, lawn, and household upkeep costs for the current month.</p>
+
+        <label for="expenseDescription">Description</label>
+        <input id="expenseDescription" type="text" placeholder="Example: HVAC filter, plumbing parts..." />
+
+        <label for="expenseCategory">Category</label>
+        <select id="expenseCategory">
+          <option value="Maintenance">Maintenance</option>
+          <option value="Repair">Repair</option>
+          <option value="Lawn">Lawn</option>
+          <option value="Supplies">Supplies</option>
+          <option value="Appliances">Appliances</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="expenseAmount">Amount</label>
+        <input id="expenseAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
+
+        <div class="button-row">
+          <button class="primary" onclick="addExpense()">Add expense</button>
+          <button class="secondary" onclick="resetMonthlyExpenses()">Reset this month</button>
+        </div>
+
+        <div class="reminder-item" style="margin-top:14px;">
+          <div class="small" id="expenseMonthLabel">Current month</div>
+          <strong style="font-size:1.4rem;margin-top:4px;" id="expenseTotal">$0.00</strong>
+          <div class="reminder-meta">Total home-upkeep spending this month</div>
+        </div>
+
+        <div id="expenseList" style="margin-top:12px;"></div>
+
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="small">This month</div>
+            <strong id="expenseMonthTotalStat">$0.00</strong>
+          </div>
+          <div class="stat-box">
+            <div class="small">This year</div>
+            <strong id="expenseYearTotal">$0.00</strong>
+          </div>
+        </div>
+
+        <div id="expenseBreakdown" style="margin-top:14px;"></div>
+
+      </div>
+    </section>
+
+    <section id="moreTab" class="tab">
+      <div class="hero">
+        <h2>Home Management</h2>
+        <p>Seasonal maintenance, home details, inventory, projects, due dates, repair history, and photo records.</p>
+      </div>
+
+      <div class="card" data-search-title="Seasonal maintenance">
+        <strong>Seasonal Maintenance</strong>
+        <p class="small">A quick set of tasks that change throughout the year.</p>
+        <div class="progress"><div id="seasonalProgressBar"></div></div>
+        <div class="progress-label" id="seasonalProgressText">0% complete</div>
+      </div>
+
+      <h3 class="section-title">Spring</h3>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-spring-gutters" /><span class="title">Clean gutters and verify drainage</span></summary>
+        <div class="detail-body"><ul><li>Remove winter debris.</li><li>Confirm downspouts discharge away from the foundation.</li><li>Look for loose gutter sections.</li></ul></div>
+      </details>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-spring-ac" /><span class="title">Prepare AC for cooling season</span></summary>
+        <div class="detail-body"><ul><li>Clear the outdoor condenser.</li><li>Install a clean HVAC filter.</li><li>Test cooling before the first hot spell.</li></ul></div>
+      </details>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-spring-exterior" /><span class="title">Walk the exterior after winter</span></summary>
+        <div class="detail-body"><ul><li>Check shingles, siding, foundation, trim, and trees for winter damage.</li></ul></div>
+      </details>
+
+      <h3 class="section-title">Summer</h3>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-summer-irrigation" /><span class="title">Inspect hoses, sprinklers, and outdoor faucets</span></summary>
+        <div class="detail-body"><ul><li>Check for leaks and damaged fittings.</li><li>Make sure water is not pooling near the foundation.</li></ul></div>
+      </details>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-summer-trees" /><span class="title">Check trees after storms</span></summary>
+        <div class="detail-body"><ul><li>Look for cracked, hanging, or roof-rubbing limbs.</li><li>Use an arborist for high or hazardous limbs.</li></ul></div>
+      </details>
+
+      <h3 class="section-title">Fall</h3>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-fall-heat" /><span class="title">Prepare heating system</span></summary>
+        <div class="detail-body"><ul><li>Replace or inspect the filter.</li><li>Test heat before cold weather arrives.</li><li>Keep vents clear.</li></ul></div>
+      </details>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-fall-gutters" /><span class="title">Clear leaves from gutters</span></summary>
+        <div class="detail-body"><ul><li>Remove leaf buildup and check downspouts before freezing weather.</li></ul></div>
+      </details>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-fall-winterize" /><span class="title">Winterize outdoor water lines</span></summary>
+        <div class="detail-body"><ul><li>Disconnect hoses.</li><li>Drain or protect exposed outdoor plumbing as appropriate for your climate.</li></ul></div>
+      </details>
+
+      <h3 class="section-title">Winter</h3>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-winter-freeze" /><span class="title">Watch for freeze-related plumbing problems</span></summary>
+        <div class="detail-body"><ul><li>Check vulnerable plumbing during severe cold.</li><li>Know where the main water shutoff is located.</li></ul></div>
+      </details>
+      <details>
+        <summary><input class="task-check seasonal-task" type="checkbox" data-key="season-winter-roof" /><span class="title">Check roof and gutters after winter storms</span></summary>
+        <div class="detail-body"><ul><li>Look from the ground for damage, heavy ice, or loose materials.</li></ul></div>
+      </details>
+
+      <div class="card" data-search-title="Home profile">
+        <strong>Home Profile</strong>
+        <p class="small">Save the information you always end up looking for later.</p>
+
+        <label for="profileYearBuilt">Year built</label>
+        <input id="profileYearBuilt" type="number" min="1700" max="2100" placeholder="Example: 1998" />
+
+        <label for="profileFilter">HVAC filter size</label>
+        <input id="profileFilter" type="text" placeholder="Example: 16 x 25 x 1" />
+
+        <label for="profileHVAC">HVAC make / model</label>
+        <input id="profileHVAC" type="text" placeholder="Model or serial notes" />
+
+        <label for="profileWaterHeater">Water heater</label>
+        <input id="profileWaterHeater" type="text" placeholder="Type, size, install year..." />
+
+        <label for="profileRoof">Roof</label>
+        <input id="profileRoof" type="text" placeholder="Material, approximate age, installer..." />
+
+        <label for="profileAppliances">Appliance model notes</label>
+        <textarea id="profileAppliances" placeholder="Refrigerator, range, washer, dryer, etc."></textarea>
+
+        <label for="profilePaint">Paint colors / finishes</label>
+        <textarea id="profilePaint" placeholder="Room, brand, color name or code..."></textarea>
+
+        <div class="button-row">
+          <button class="primary" onclick="saveHomeProfile()">Save home profile</button>
+        </div>
+        <div class="status" id="profileStatus"></div>
+      </div>
+
+
+      <div class="card" id="inventoryCard" data-search-title="Home inventory appliance binder warranties manuals serial numbers">
+        <div class="card-heading-row">
+          <div>
+            <strong>Home Inventory & Appliance Binder</strong>
+            <p class="small">Keep model numbers, warranties, parts, manuals, receipts, and a reference photo together.</p>
+          </div>
+          <span class="chip" id="inventoryCountChip">0 items</span>
+        </div>
+
+        <input id="inventoryEditId" type="hidden" />
+
+        <label for="inventoryName">Item / appliance</label>
+        <input id="inventoryName" type="text" placeholder="Example: Kitchen refrigerator" />
+
+        <div class="form-grid">
+          <div>
+            <label for="inventoryType">Type</label>
+            <select id="inventoryType">
+              <option value="Appliance">Appliance</option>
+              <option value="HVAC">HVAC</option>
+              <option value="Plumbing">Plumbing</option>
+              <option value="Electrical">Electrical</option>
+              <option value="Outdoor">Outdoor</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="inventoryRoom">Room / location</label>
+            <input id="inventoryRoom" type="text" placeholder="Kitchen, garage..." />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="inventoryBrand">Brand</label>
+            <input id="inventoryBrand" type="text" placeholder="Example: Whirlpool" />
+          </div>
+          <div>
+            <label for="inventoryModel">Model</label>
+            <input id="inventoryModel" type="text" placeholder="Model number" />
+          </div>
+        </div>
+
+        <label for="inventorySerial">Serial number</label>
+        <input id="inventorySerial" type="text" placeholder="Serial number" />
+
+        <div class="form-grid">
+          <div>
+            <label for="inventoryPurchaseDate">Purchase / install date</label>
+            <input id="inventoryPurchaseDate" type="date" />
+          </div>
+          <div>
+            <label for="inventoryWarrantyEnd">Warranty ends</label>
+            <input id="inventoryWarrantyEnd" type="date" />
+          </div>
+        </div>
+
+        <label for="inventoryPart">Filter / replacement part number</label>
+        <input id="inventoryPart" type="text" placeholder="Filter, belt, bulb, cartridge, etc." />
+
+        <label for="inventoryManualUrl">Manual link (optional)</label>
+        <input id="inventoryManualUrl" type="url" inputmode="url" placeholder="https://..." />
+
+        <label for="inventoryReceiptUrl">Receipt / warranty link (optional)</label>
+        <input id="inventoryReceiptUrl" type="url" inputmode="url" placeholder="https://..." />
+
+        <label for="inventoryPhoto">Reference photo (optional)</label>
+        <input id="inventoryPhoto" type="file" accept="image/*" />
+
+        <label for="inventoryNotes">Notes</label>
+        <textarea id="inventoryNotes" placeholder="Maintenance notes, replacement parts, store, installer, finish/color..."></textarea>
+
+        <div class="button-row">
+          <button class="primary" id="inventorySaveButton" onclick="saveInventoryItem()">Save item</button>
+          <button class="secondary" id="inventoryCancelButton" onclick="cancelInventoryEdit()" style="display:none;">Cancel edit</button>
+        </div>
+        <div class="status" id="inventoryStatus"></div>
+
+        <label for="inventorySearch">Search inventory</label>
+        <input id="inventorySearch" type="text" placeholder="Search name, room, brand, model, serial..." oninput="renderInventory()" />
+
+        <div id="inventoryList"></div>
+      </div>
+
+      <div class="card" id="projectsCard" data-search-title="Home project planner budgets tasks renovation repair">
+        <div class="card-heading-row">
+          <div>
+            <strong>Home Project Planner</strong>
+            <p class="small">Plan repairs and improvements with a budget, target date, task list, and actual project costs.</p>
+          </div>
+          <span class="chip" id="projectCountChip">0 active</span>
+        </div>
+
+        <input id="projectEditId" type="hidden" />
+
+        <label for="projectName">Project</label>
+        <input id="projectName" type="text" placeholder="Example: Replace back deck boards" />
+
+        <div class="form-grid">
+          <div>
+            <label for="projectCategory">Category</label>
+            <select id="projectCategory">
+              <option value="Repair">Repair</option>
+              <option value="Upgrade">Upgrade</option>
+              <option value="Renovation">Renovation</option>
+              <option value="Outdoor">Outdoor</option>
+              <option value="Safety">Safety</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="projectStatus">Status</label>
+            <select id="projectStatus">
+              <option value="Planning">Planning</option>
+              <option value="In progress">In progress</option>
+              <option value="Waiting">Waiting</option>
+              <option value="Complete">Complete</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="projectTargetDate">Target date</label>
+            <input id="projectTargetDate" type="date" />
+          </div>
+          <div>
+            <label for="projectBudget">Budget</label>
+            <input id="projectBudget" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
+          </div>
+        </div>
+
+        <label for="projectTasks">Tasks — one per line</label>
+        <textarea id="projectTasks" placeholder="Measure area&#10;Get two estimates&#10;Order materials&#10;Schedule work"></textarea>
+
+        <label for="projectNotes">Notes</label>
+        <textarea id="projectNotes" placeholder="Contractor notes, material ideas, decisions, measurements..."></textarea>
+
+        <div class="button-row">
+          <button class="primary" id="projectSaveButton" onclick="saveProject()">Save project</button>
+          <button class="secondary" id="projectCancelButton" onclick="cancelProjectEdit()" style="display:none;">Cancel edit</button>
+        </div>
+        <div class="status" id="projectStatusMessage"></div>
+
+        <div id="projectList"></div>
+      </div>
+
+      <div class="card" id="maintenanceScheduleCard" data-search-title="Maintenance schedule due dates">
+        <strong>Maintenance Schedule</strong>
+        <p class="small">Track when something was last done and when it is due again.</p>
+
+        <label for="scheduleTask">Task</label>
+        <input id="scheduleTask" type="text" placeholder="Example: Replace furnace filter" />
+
+        <label for="scheduleLastDone">Last done</label>
+        <input id="scheduleLastDone" type="date" />
+
+        <label for="scheduleInterval">Repeat</label>
+        <select id="scheduleInterval">
+          <option value="7">Every week</option>
+          <option value="30">Every month</option>
+          <option value="60">Every 2 months</option>
+          <option value="90" selected>Every 3 months</option>
+          <option value="180">Every 6 months</option>
+          <option value="365">Every year</option>
+        </select>
+
+        <div class="button-row">
+          <button class="primary" onclick="addScheduleItem()">Add scheduled task</button>
+        </div>
+
+        <div id="scheduleList"></div>
+      </div>
+
+      <div class="card" data-search-title="Repair history">
+        <strong>Repair History</strong>
+        <p class="small">Keep a permanent log of repairs, costs, contractors, and notes.</p>
+
+        <label for="repairTitle">Repair</label>
+        <input id="repairTitle" type="text" placeholder="Example: Replaced kitchen faucet" />
+
+        <label for="repairDate">Date</label>
+        <input id="repairDate" type="date" />
+
+        <label for="repairCost">Cost</label>
+        <input id="repairCost" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
+
+        <label for="repairContractor">Contractor / company</label>
+        <input id="repairContractor" type="text" placeholder="Optional" />
+
+        <label for="repairNotes">Notes</label>
+        <textarea id="repairNotes" placeholder="What was repaired, parts used, warranty information..."></textarea>
+
+        <div class="button-row">
+          <button class="primary" onclick="addRepair()">Save repair</button>
+        </div>
+
+        <div id="repairList"></div>
+      </div>
+
+      <div class="card" data-search-title="Home photo log">
+        <strong>Photo Log</strong>
+        <p class="small">Save dated photos of cracks, roof areas, leaks, trees, or anything you want to monitor.</p>
+
+        <label for="photoArea">Area</label>
+        <select id="photoArea">
+          <option>Foundation</option>
+          <option>Roof</option>
+          <option>Plumbing</option>
+          <option>Trees</option>
+          <option>HVAC</option>
+          <option>Exterior</option>
+          <option>Other</option>
+        </select>
+
+        <label for="photoNote">Note</label>
+        <input id="photoNote" type="text" placeholder="Example: Crack near northeast basement window" />
+
+        <label for="photoFile">Photo</label>
+        <input id="photoFile" type="file" accept="image/*" />
+
+        <div class="button-row">
+          <button class="primary" onclick="addPhotoLog()">Add photo</button>
+        </div>
+        <div class="status" id="photoStatus"></div>
+
+        <div id="photoList"></div>
+      </div>
+    </section>
+
+    <section id="emergencyTab" class="tab">
+      <div class="hero">
+        <h2>Emergency</h2>
+        <p>Keep critical house information in one place so you are not hunting for it when something goes wrong.</p>
+      </div>
+
+      <div class="card" data-search-title="Emergency home information">
+        <label for="emergencyWater">Main water shutoff location</label>
+        <input id="emergencyWater" type="text" placeholder="Example: Basement utility wall behind furnace" />
+
+        <label for="emergencyGas">Gas shutoff location</label>
+        <input id="emergencyGas" type="text" placeholder="If applicable" />
+
+        <label for="emergencyPanel">Electrical panel location</label>
+        <input id="emergencyPanel" type="text" placeholder="Example: Garage east wall" />
+
+        <label for="emergencyPlumber">Plumber / phone</label>
+        <input id="emergencyPlumber" type="text" placeholder="Company and phone number" />
+
+        <label for="emergencyElectrician">Electrician / phone</label>
+        <input id="emergencyElectrician" type="text" placeholder="Company and phone number" />
+
+        <label for="emergencyHVAC">HVAC company / phone</label>
+        <input id="emergencyHVAC" type="text" placeholder="Company and phone number" />
+
+        <label for="emergencyInsurance">Home insurance / policy notes</label>
+        <textarea id="emergencyInsurance" placeholder="Carrier, policy number, claims phone, deductible notes..."></textarea>
+
+        <label for="emergencyNotes">Other emergency notes</label>
+        <textarea id="emergencyNotes" placeholder="Generator instructions, sump pump notes, alarm information..."></textarea>
+
+        <div class="button-row">
+          <button class="primary" onclick="saveEmergencyInfo()">Save emergency info</button>
+        </div>
+        <div class="status" id="emergencyStatus"></div>
+      </div>
+
+      <div class="warning">
+        For gas odors, fire, electrical arcing, suspected carbon monoxide, or other immediate hazards, leave the unsafe area and use the appropriate emergency service rather than troubleshooting inside the app.
+      </div>
+    </section>
+
+    <section id="settingsTab" class="tab">
+      <div class="hero">
+        <h2>Settings</h2>
+        <p>Customize how the app looks on this device.</p>
+      </div>
+
+      <div class="card" data-search-title="Appearance settings">
+        <strong>Appearance</strong>
+
+        <label for="themeSelect">Theme</label>
+        <select id="themeSelect" onchange="applyTheme(this.value, true)">
+          <option value="light">Light</option>
+          <option value="dark" selected>Dark</option>
+          <option value="system">Use phone setting</option>
+        </select>
+
+        <label for="backgroundImageInput">Background image</label>
+        <input id="backgroundImageInput" type="file" accept="image/*" />
+
+        <div class="button-row">
+          <button class="primary" onclick="saveBackgroundImage()">Use selected image</button>
+          <button class="secondary" onclick="removeBackgroundImage()">Remove image</button>
+        </div>
+
+        <div id="settingsPreview" class="settings-preview"></div>
+
+        <div class="status" id="appearanceStatus"></div>
+      </div>
+
+      <div class="card" id="offlineInstallCard" data-search-title="Offline install PWA connection internet home screen">
+        <strong>Offline & Install</strong>
+        <p class="small">The core app can keep working after the first successful online visit, even when your phone loses its connection.</p>
+
+        <div class="offline-status-panel">
+          <span id="connectionDot" class="connection-dot" aria-hidden="true"></span>
+          <div>
+            <strong id="connectionStatusText" aria-live="polite">Checking connection…</strong>
+            <div class="small" id="offlineReadinessText">Preparing offline support…</div>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="installAppButton" class="primary" type="button" onclick="installHomeApp()" hidden>Install app</button>
+          <button id="refreshOfflineButton" class="secondary" type="button" onclick="refreshOfflineCopy()">Refresh offline copy</button>
+        </div>
+
+        <div class="tip">
+          Checklists, recipes, groceries, reminders, notes, expenses, inventory, projects, photos, settings, and saved home records remain local to this device. External manual/receipt links and future cloud or weather features need internet and will resume when you reconnect.
+        </div>
+        <div class="status" id="offlineStatus"></div>
+      </div>
+
+      <div class="card" id="ruthVisualEnhancerCard" data-search-title="Ruth's Visual Enhancer font text size accessibility">
+        <strong>Ruth's Visual Enhancer</strong>
+        <p class="small">Make the app text easier to read on this device. Your chosen size is saved automatically.</p>
+
+        <div class="ruth-visual-panel">
+          <div>
+            <div class="small">Current text size</div>
+            <strong id="ruthFontScaleLabel" aria-live="polite">100%</strong>
+          </div>
+
+          <div class="ruth-font-controls" role="group" aria-label="Ruth's Visual Enhancer text size controls">
+            <button class="secondary ruth-font-button" type="button" onclick="decreaseRuthFont()" aria-label="Make text smaller">A−</button>
+            <button class="secondary" type="button" onclick="resetRuthFont()">Normal</button>
+            <button class="primary ruth-font-button" type="button" onclick="increaseRuthFont()" aria-label="Make text larger">A+</button>
+          </div>
+        </div>
+
+        <div class="ruth-font-preview" aria-hidden="true">
+          <strong>Preview</strong>
+          <div>Home maintenance should be comfortable to read.</div>
+          <div class="small">Use A− or A+ until the text feels right.</div>
+        </div>
+
+        <div class="status" id="ruthVisualStatus"></div>
+      </div>
+
+
+      <div class="card" id="backupCard" data-search-title="Backup restore export import home data">
+        <strong>Backup & Restore</strong>
+        <p class="small">Download one backup file containing the information saved by this app on this device. Keep it somewhere safe so you can restore your records later.</p>
+
+        <div class="button-row">
+          <button class="primary" onclick="exportHomeBackup()">Export my home backup</button>
+        </div>
+
+        <label for="backupImportFile">Restore from backup</label>
+        <input id="backupImportFile" type="file" accept=".json,application/json" />
+        <div class="button-row">
+          <button class="secondary" onclick="importHomeBackup()">Restore selected backup</button>
+        </div>
+
+        <div class="warning">
+          Restoring replaces the app data currently saved in this browser with the contents of the selected backup file.
+        </div>
+        <div class="status" id="backupStatus"></div>
+      </div>
+
+      <div class="card">
+        <strong>Reset appearance</strong>
+        <p class="small">Returns the app to the default dark theme and removes any custom background.</p>
+        <button class="danger-btn" onclick="resetAppearance()">Reset appearance</button>
+      </div>
+
+      <span
+        class="settings-version-watermark"
+        title="App version 38"
+        aria-label="App version 38"
+      >v38</span>
+    </section>
+
+  </main>
+
+  <nav aria-label="Main navigation">
+    <button class="nav-btn" data-target="maintenance"><span>🛠️</span>Maintenance</button>
+    <button class="nav-btn" data-target="lawn"><span>🌱</span>Lawn</button>
+    <button class="nav-btn" data-target="reminders"><span>🔔</span>Reminders</button>
+    <button class="nav-btn" data-target="groceries"><span>🛒</span>Groceries</button>
+    <button class="nav-btn" data-target="notesTab"><span>📝</span>Notes</button>
+    <button class="nav-btn" data-target="moreTab"><span>🧰</span>More</button>
+    <button class="nav-btn" data-target="emergencyTab"><span>🚨</span>Emergency</button>
+    <button class="nav-btn" data-target="settingsTab"><span>⚙️</span>Settings</button>
+  </nav>
+
+  <script src="version.js"></script>
+  <script src="update-manager.js"></script>
+  <script src="recipes.js"></script>
+  <script src="app.js"></script>
+  <script src="features.js"></script>
+  <script src="offline.js"></script>
+</body>
+</html>

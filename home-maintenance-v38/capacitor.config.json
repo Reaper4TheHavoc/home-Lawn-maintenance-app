@@ -1,0 +1,12 @@
+{
+  "appId": "com.homeandlawn.maintenance",
+  "appName": "Home & Lawn Maintenance",
+  "webDir": "web",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "localhost"
+  },
+  "android": {
+    "backgroundColor": "#0b121b"
+  }
+}

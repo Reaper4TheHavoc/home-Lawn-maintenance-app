@@ -1,0 +1,1 @@
+Version 38 - Android-ready beta foundation; centralized versioning, saved-data migration framework, native-aware offline behavior.
